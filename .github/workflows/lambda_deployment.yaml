@@ -28,6 +28,11 @@ jobs:
             --function-name ${{ env.LAMBDA_NAME }} \
             --zip-file fileb://${{ env.LAMBDA_DIR }}/${{ env.LAMBDA_FILENAME }}.zip"
 
+      - name: Verify deployment
+        run: |
+          aws lambda get-function \
+            --function-name ${{ env.LAMBDA_NAME }}
+
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
