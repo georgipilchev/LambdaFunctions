@@ -7,7 +7,7 @@ import {
   DeleteCommand,
 } from "@aws-sdk/lib-dynamodb";
 
-const georgi = 1;
+const georgi = 2;
 const client = new DynamoDBClient();
 const docClient = DynamoDBDocumentClient.from(client);
 
