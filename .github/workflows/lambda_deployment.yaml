@@ -1,0 +1,34 @@
+name: Deploy src/AddGameFunction
+
+on:
+  push:
+    paths:
+      - "src/AddGameFunction/**"
+    branches: [main]
+
+env:
+    LAMBDA_NAME: AddGameFunction
+    LAMBDA_DIR: src/AddGameFunction
+    LAMBDA_FILENAME: index
+    LAMBDA_REGION: "eu-north-1"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Create zip file for Lambda function
+        working-directory: ${{ env.LAMBDA_DIR }}
+        run: zip -r ${{ env.LAMBDA_FILENAME }}.zip .
+
+      - name: Deploy to AWS Lambda
+        run: "aws lambda update-function-code \
+            --function-name ${{ env.LAMBDA_NAME }} \
+            --zip-file fileb://${{ env.LAMBDA_DIR }}/${{ env.LAMBDA_FILENAME }}.zip"
+
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ env.LAMBDA_REGION }}
