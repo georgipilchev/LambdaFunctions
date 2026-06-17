@@ -7,7 +7,7 @@ Resources:
     Properties:
       Handler: index.handler
       Runtime: nodejs22.x
-      CodeUri: .
+      CodeUri: src/DeleteGameFunction
       Policies:
         - Statement:
             - Effect: Allow
@@ -27,7 +27,7 @@ Resources:
     Properties:
       Handler: index.handler
       Runtime: nodejs22.x
-      CodeUri: .
+      CodeUri: src/AddGameFunction
       Policies:
         - Statement:
             - Effect: Allow
