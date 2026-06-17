@@ -2,6 +2,16 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 
 Resources:
+
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Auth:
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: arn:aws:cognito-idp:eu-north-1:609356923180:userpool/eu-north-1_NmMwkSTUS
+
   DeleteGameFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -19,10 +29,12 @@ Resources:
         DeleteGame:
           Type: Api
           Properties:
+            RestApiId: !Ref ApiGateway
             Path: /Game
             Method: delete
             Auth:
-                Authorizer: CognitoAuthorizer
+              Authorizer: CognitoAuthorizer
+
 
   AddGameFunction:
     Type: AWS::Serverless::Function
@@ -38,18 +50,9 @@ Resources:
               Resource:
                 - arn:aws:dynamodb:eu-north-1:609356923180:table/GamesTable
       Events:
-        DeleteGame:
+        AddGame:
           Type: Api
           Properties:
+            RestApiId: !Ref ApiGateway
             Path: /Game
             Method: post
-
-  ApiGatewayAuthorizer:
-      Type: AWS::ApiGateway::Authorizer
-      Properties:
-        Name: CognitoAuthorizer
-        RestApiId: !Ref ServerlessRestApi
-        Type: COGNITO_USER_POOLS
-        IdentitySource: method.request.header.Authorization
-        ProviderARNs:
-          - arn:aws:cognito-idp:eu-north-1:609356923180:userpool/eu-north-1_NmMwkSTUS
