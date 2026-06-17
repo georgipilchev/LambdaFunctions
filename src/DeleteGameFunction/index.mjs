@@ -1,10 +1,9 @@
 import { ListTablesCommand, DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
-  PutCommand,
   DynamoDBDocumentClient,
+  DeleteCommand,
 } from "@aws-sdk/lib-dynamodb";
 
-const georgi = 4;
 const client = new DynamoDBClient();
 const docClient = DynamoDBDocumentClient.from(client);
 
@@ -14,22 +13,27 @@ export const handler = async (event, context) => {
   return response;
 };
 
-const handlePostRequest = async (event, context) => {
-  const { Game, ImageLink } = JSON.parse(event.body);
+const handleDeleteRequest = async (event) => {
+  const { GameID } = JSON.parse(event.body);
 
-  const command = new PutCommand({
+  const command = new DeleteCommand({
     TableName: "GamesTable",
-    Item: {
-      GameID: context.awsRequestId,
-      Game,
-      ImageLink,
-    },
+    Key: { GameID },
   });
 
-  await docClient.send(command);
+  try {
+    await docClient.send(command);
+  } catch (err) {
+    return {
+        statusCode: 500,
+        body: JSON.stringify({
+          message: err.message,
+        }),
+    };
+  }
 
   return {
     statusCode: 200,
-    body: JSON.stringify({ message: "Game added successfully" }),
+    body: JSON.stringify({ message: "Game deleted successfully" }),
   };
 };

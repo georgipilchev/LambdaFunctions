@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  DeleteGameFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs22.x
+      CodeUri: .
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:DeleteItem
+              Resource:
+                - arn:aws:dynamodb:eu-north-1:609356923180:table/GamesTable
+      Events:
+        DeleteGame:
+          Type: Api
+          Properties:
+            Path: /Game
+            Method: delete
+
+  AddGameFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs22.x
+      CodeUri: .
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+              Resource:
+                - arn:aws:dynamodb:eu-north-1:609356923180:table/GamesTable
+      Events:
+        DeleteGame:
+          Type: Api
+          Properties:
+            Path: /Game
+            Method: delete
+
