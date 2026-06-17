@@ -8,6 +8,19 @@ const client = new DynamoDBClient();
 const docClient = DynamoDBDocumentClient.from(client);
 
 export const handler = async (event) => {
+
+  const groups =
+    event.requestContext?.authorizer?.claims?.["cognito:groups"];
+
+  if (!groups || !groups.includes("Admins")) {
+    return {
+      statusCode: 403,
+      body: JSON.stringify({
+        message: "Forbidden: Admins only",
+      }),
+    };
+  }
+
   return await handleDeleteRequest(event);
 };
 
