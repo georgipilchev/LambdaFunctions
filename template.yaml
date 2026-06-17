@@ -40,5 +40,5 @@ Resources:
           Type: Api
           Properties:
             Path: /Game
-            Method: delete
+            Method: post
 
