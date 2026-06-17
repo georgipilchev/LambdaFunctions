@@ -1,4 +1,4 @@
-import { ListTablesCommand, DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
   DynamoDBDocumentClient,
   DeleteCommand,
@@ -7,10 +7,8 @@ import {
 const client = new DynamoDBClient();
 const docClient = DynamoDBDocumentClient.from(client);
 
-export const handler = async (event, context) => {
-  let response;
-  response = await handlePostRequest(event, context);
-  return response;
+export const handler = async (event) => {
+  return await handleDeleteRequest(event);
 };
 
 const handleDeleteRequest = async (event) => {
@@ -24,16 +22,20 @@ const handleDeleteRequest = async (event) => {
   try {
     await docClient.send(command);
   } catch (err) {
+    console.error(err);
+
     return {
-        statusCode: 500,
-        body: JSON.stringify({
-          message: err.message,
-        }),
+      statusCode: 500,
+      body: JSON.stringify({
+        message: err.message,
+      }),
     };
   }
 
   return {
     statusCode: 200,
-    body: JSON.stringify({ message: "Game deleted successfully" }),
+    body: JSON.stringify({
+      message: "Game deleted successfully",
+    }),
   };
 };
