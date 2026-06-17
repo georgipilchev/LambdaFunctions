@@ -21,6 +21,8 @@ Resources:
           Properties:
             Path: /Game
             Method: delete
+            Auth:
+                Authorizer: CognitoAuthorizer
 
   AddGameFunction:
     Type: AWS::Serverless::Function
@@ -42,3 +44,12 @@ Resources:
             Path: /Game
             Method: post
 
+  ApiGatewayAuthorizer:
+      Type: AWS::ApiGateway::Authorizer
+      Properties:
+        Name: CognitoAuthorizer
+        RestApiId: !Ref ServerlessRestApi
+        Type: COGNITO_USER_POOLS
+        IdentitySource: method.request.header.Authorization
+        ProviderARNs:
+          - arn:aws:cognito-idp:eu-north-1:609356923180:userpool/eu-north-1_NmMwkSTUS
