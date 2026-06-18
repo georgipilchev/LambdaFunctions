@@ -15,6 +15,9 @@ export const handler = async (event) => {
   if (!groups || !groups.includes("Administrators")) {
     return {
       statusCode: 403,
+      headers: {
+        "Access-Control-Allow-Origin": "*"
+      },
       body: JSON.stringify({
         message: "Forbidden: Admins only",
       }),
@@ -36,6 +39,9 @@ const handleDeleteRequest = async (event) => {
     await docClient.send(command);
     return {
     statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    },
     body: JSON.stringify({
       message: "Game deleted successfully",
     }),
@@ -45,6 +51,9 @@ const handleDeleteRequest = async (event) => {
 
     return {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*"
+      },
       body: JSON.stringify({
         message: err.message,
       }),

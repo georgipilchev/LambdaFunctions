@@ -42,6 +42,9 @@ const handlePostRequest = async (event, context) => {
 
     return {
     statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    },
     body: JSON.stringify({ message: "Game added successfully" }),
   };
   }
@@ -49,6 +52,9 @@ const handlePostRequest = async (event, context) => {
     console.error(err);
     return {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*"
+      },
       body: JSON.stringify({
         message: err.message,
       }),
