@@ -8,9 +8,9 @@ Resources:
     Properties:
       StageName: prod
       Cors:
-      AllowMethods: "'GET,POST,DELETE,OPTIONS'"
-      AllowHeaders: "'Content-Type,Authorization'"
-      AllowOrigin: "'*'"
+        AllowMethods: "'GET,POST,DELETE,OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization'"
+        AllowOrigin: "'*'"
       Auth:
         Authorizers:
           CognitoAuthorizer:
