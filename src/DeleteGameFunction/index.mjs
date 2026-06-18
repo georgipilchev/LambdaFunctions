@@ -34,6 +34,12 @@ const handleDeleteRequest = async (event) => {
 
   try {
     await docClient.send(command);
+    return {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: "Game deleted successfully",
+    }),
+  };
   } catch (err) {
     console.error(err);
 
@@ -44,11 +50,4 @@ const handleDeleteRequest = async (event) => {
       }),
     };
   }
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: "Game deleted successfully",
-    }),
-  };
 };
