@@ -12,7 +12,7 @@ export const handler = async (event) => {
   const groups =
     event.requestContext?.authorizer?.claims?.["cognito:groups"];
 
-  if (!groups || !groups.includes("Admins")) {
+  if (!groups || !groups.includes("Administrators")) {
     return {
       statusCode: 403,
       body: JSON.stringify({
