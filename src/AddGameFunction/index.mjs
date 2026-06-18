@@ -9,17 +9,17 @@ const docClient = DynamoDBDocumentClient.from(client);
 
 export const handler = async (event) => {
 
-  const groups =
-    event.requestContext?.authorizer?.claims?.["cognito:groups"];
+  // const groups =
+  //   event.requestContext?.authorizer?.claims?.["cognito:groups"];
 
-  if (!groups || !groups.includes("Administrators")) {
-    return {
-      statusCode: 403,
-      body: JSON.stringify({
-        message: "Forbidden: Admins only",
-      }),
-    };
-  }
+  // if (!groups || !groups.includes("Administrators")) {
+  //   return {
+  //     statusCode: 403,
+  //     body: JSON.stringify({
+  //       message: "Forbidden: Admins only",
+  //     }),
+  //   };
+  // }
 
   return await handlePostRequest(event);
 };
