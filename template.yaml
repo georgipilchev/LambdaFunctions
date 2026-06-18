@@ -14,6 +14,28 @@ Resources:
             Identity:
               Header: Authorization
 
+  GetGamesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs22.x
+      CodeUri: src/GetGamesFunction
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:ScanItem
+              Resource:
+                - arn:aws:dynamodb:eu-north-1:609356923180:table/GamesTable
+      Events:
+        GetGames:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /Game
+            Method: get
+
+
   DeleteGameFunction:
     Type: AWS::Serverless::Function
     Properties:
