@@ -7,7 +7,7 @@ import {
 const client = new DynamoDBClient();
 const docClient = DynamoDBDocumentClient.from(client);
 
-export const handler = async (event) => {
+export const handler = async (event, context) => {
 
   // const groups =
   //   event.requestContext?.authorizer?.claims?.["cognito:groups"];
@@ -21,7 +21,7 @@ export const handler = async (event) => {
   //   };
   // }
 
-  return await handlePostRequest(event);
+  return await handlePostRequest(event, context);
 };
 
 
