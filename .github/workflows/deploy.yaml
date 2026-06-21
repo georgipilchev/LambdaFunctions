@@ -32,3 +32,23 @@ jobs:
             --capabilities CAPABILITY_IAM \
             --no-confirm-changeset \
             --no-fail-on-empty-changeset
+
+      - name: Allow Cognito to invoke Lambda
+        run: |
+          aws lambda add-permission \
+            --function-name AddUserFunction \
+            --statement-id CognitoPostConfirmation \
+            --action lambda:InvokeFunction \
+            --principal cognito-idp.amazonaws.com \
+            --source-arn arn:aws:cognito-idp:eu-north-1:609356923180:userpool/eu-north-1_NmMwkSTUS || true
+
+      - name: Attach Cognito Post Confirmation Trigger
+        run: |
+          LAMBDA_ARN=$(aws lambda get-function \
+            --function-name AddUserFunction \
+            --query 'Configuration.FunctionArn' \
+            --output text)
+
+          aws cognito-idp update-user-pool \
+            --user-pool-id eu-north-1_NmMwkSTUS \
+            --lambda-config PostConfirmation=$LAMBDA_ARN

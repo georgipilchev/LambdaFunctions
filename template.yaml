@@ -84,3 +84,18 @@ Resources:
             RestApiId: !Ref ApiGateway
             Path: /Game
             Method: post
+  
+  AddUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: AddUserFunction
+      Handler: index.handler
+      Runtime: nodejs22.x
+      CodeUri: src/AddUserFunction
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+              Resource:
+                - arn:aws:dynamodb:eu-north-1:609356923180:table/UserTable
