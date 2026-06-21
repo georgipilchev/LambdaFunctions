@@ -36,8 +36,10 @@ jobs:
       - name: Allow Cognito to invoke Lambda
         run: |
           LAMBDA_ARN=$(aws lambda list-functions \
-            --query "Functions[?contains(FunctionName, 'AddUserFunction')].FunctionArn" \
+            --query "Functions[?contains(FunctionName, 'modsharingplatform-api-AddUserFunction')].FunctionArn" \
             --output text)
+
+          echo "Using Lambda: $LAMBDA_ARN"
 
           aws lambda add-permission \
             --function-name "$LAMBDA_ARN" \
@@ -50,8 +52,10 @@ jobs:
       - name: Attach Cognito Post Confirmation Trigger
         run: |
           LAMBDA_ARN=$(aws lambda list-functions \
-            --query "Functions[?contains(FunctionName, 'AddUserFunction')].FunctionArn" \
+            --query "Functions[?contains(FunctionName, 'modsharingplatform-api-AddUserFunction')].FunctionArn" \
             --output text)
+
+          echo "Attaching Cognito trigger to: $LAMBDA_ARN"
 
           aws cognito-idp update-user-pool \
             --user-pool-id eu-north-1_NmMwkSTUS \
