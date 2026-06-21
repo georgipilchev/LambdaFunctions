@@ -59,4 +59,5 @@ jobs:
 
           aws cognito-idp update-user-pool \
             --user-pool-id eu-north-1_NmMwkSTUS \
+            --auto-verified-attributes email \
             --lambda-config PostConfirmation=$LAMBDA_ARN
