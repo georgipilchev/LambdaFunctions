@@ -35,18 +35,22 @@ jobs:
 
       - name: Allow Cognito to invoke Lambda
         run: |
+          LAMBDA_ARN=$(aws lambda list-functions \
+            --query "Functions[?contains(FunctionName, 'AddUserFunction')].FunctionArn" \
+            --output text)
+
           aws lambda add-permission \
-            --function-name AddUserFunction \
+            --function-name "$LAMBDA_ARN" \
             --statement-id CognitoPostConfirmation \
             --action lambda:InvokeFunction \
             --principal cognito-idp.amazonaws.com \
-            --source-arn arn:aws:cognito-idp:eu-north-1:609356923180:userpool/eu-north-1_NmMwkSTUS || true
+            --source-arn arn:aws:cognito-idp:eu-north-1:609356923180:userpool/eu-north-1_NmMwkSTUS || echo "Permission already exists"
+
 
       - name: Attach Cognito Post Confirmation Trigger
         run: |
-          LAMBDA_ARN=$(aws lambda get-function \
-            --function-name AddUserFunction \
-            --query 'Configuration.FunctionArn' \
+          LAMBDA_ARN=$(aws lambda list-functions \
+            --query "Functions[?contains(FunctionName, 'AddUserFunction')].FunctionArn" \
             --output text)
 
           aws cognito-idp update-user-pool \
