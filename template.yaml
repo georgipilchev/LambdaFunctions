@@ -210,18 +210,6 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: MainModTable
   
-  VirusCheckBucketNotification:
-    Type: AWS::S3::BucketNotification
-    Properties:
-      Bucket: moddatabucket
-      NotificationConfiguration:
-        LambdaConfigurations:
-          - Event: s3:ObjectCreated:*
-            Function:
-              Fn::GetAtt:
-                - VirusCheckFunction
-                - Arn
-
   AllowS3InvokeVirusScanner:
     Type: AWS::Lambda::Permission
     Properties:
@@ -233,25 +221,6 @@ Resources:
         s3.amazonaws.com
       SourceArn:
         arn:aws:s3:::moddatabucket
-
-  ImageProcessorBucketNotification:
-    Type: AWS::S3::BucketNotification
-    Properties:
-      Bucket: moddatabucket
-      NotificationConfiguration:
-        LambdaConfigurations:
-          - Event: s3:ObjectCreated:*
-            Filter:
-              S3Key:
-                Rules:
-                  - Name: prefix
-                    Value: mods/
-                  - Name: suffix
-                    Value: /original
-            Function:
-              Fn::GetAtt:
-                - ImageProcessorFunction
-                - Arn
 
   AllowS3InvokeImageProcessor:
     Type: AWS::Lambda::Permission

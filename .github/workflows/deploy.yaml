@@ -35,6 +35,31 @@ jobs:
             --no-confirm-changeset \
             --no-fail-on-empty-changeset
 
+      - name: Configure S3 notifications
+        run: |
+          VIRUS_ARN=$(aws lambda get-function \
+            --function-name modsharingplatform-api-VirusCheckFunction \
+            --query 'Configuration.FunctionArn' \
+            --output text)
+
+          IMAGE_ARN=$(aws lambda get-function \
+            --function-name modsharingplatform-api-ImageProcessorFunction \
+            --query 'Configuration.FunctionArn' \
+            --output text)
+
+          jq \
+            --arg virus "$VIRUS_ARN" \
+            --arg image "$IMAGE_ARN" \
+            '.LambdaFunctionConfigurations[0].LambdaFunctionArn=$virus |
+            .LambdaFunctionConfigurations[1].LambdaFunctionArn=$image' \
+            infra/notifications.json \
+            > notifications-final.json
+
+
+          aws s3api put-bucket-notification-configuration \
+            --bucket moddatabucket \
+            --notification-configuration file://notifications-final.json
+
       - name: Allow Cognito to invoke Lambda
         run: |
           LAMBDA_ARN=$(aws lambda list-functions \

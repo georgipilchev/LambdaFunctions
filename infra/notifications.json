@@ -1,0 +1,42 @@
+{
+  "LambdaFunctionConfigurations": [
+    {
+      "Id": "VirusScanner",
+      "Event": "s3:ObjectCreated:*",
+      "Filter": {
+        "Key": {
+          "FilterRules": [
+            {
+              "Name": "prefix",
+              "Value": "mods/"
+            },
+            {
+              "Name": "suffix",
+              "Value": ".zip"
+            }
+          ]
+        }
+      },
+      "LambdaFunctionArn": "VIRUS_LAMBDA_ARN"
+    },
+    {
+      "Id": "ImageProcessor",
+      "Event": "s3:ObjectCreated:*",
+      "Filter": {
+        "Key": {
+          "FilterRules": [
+            {
+              "Name": "prefix",
+              "Value": "mods/"
+            },
+            {
+              "Name": "suffix",
+              "Value": "/original"
+            }
+          ]
+        }
+      },
+      "LambdaFunctionArn": "IMAGE_LAMBDA_ARN"
+    }
+  ]
+}
