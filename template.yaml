@@ -22,6 +22,7 @@ Resources:
             UserPoolArn: arn:aws:cognito-idp:eu-north-1:609356923180:userpool/eu-north-1_NmMwkSTUS
             Identity:
               Header: Authorization
+          DefaultAuthorizer: NONE
 
   GetGamesFunction:
     Type: AWS::Serverless::Function
@@ -137,10 +138,14 @@ Resources:
             Method: post
             Auth:
               Authorizer: CognitoAuthorizer
-            Cors:
-              AllowOrigin: "'*'"
-              AllowHeaders: "'Content-Type,Authorization'"
-              AllowMethods: "'POST,OPTIONS'"
+              AddModOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /Game/upload
+            Method: options
+            Auth:
+              Authorizer: NONE
           
   DownloadVersionFunction:
     Type: AWS::Serverless::Function
