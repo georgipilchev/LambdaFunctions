@@ -2,7 +2,7 @@
   "LambdaFunctionConfigurations": [
     {
       "Id": "VirusScanner",
-      "Event": "s3:ObjectCreated:*",
+      "Events": ["s3:ObjectCreated:*"],
       "Filter": {
         "Key": {
           "FilterRules": [
@@ -21,7 +21,7 @@
     },
     {
       "Id": "ImageProcessor",
-      "Event": "s3:ObjectCreated:*",
+      "Events": ["s3:ObjectCreated:*"],
       "Filter": {
         "Key": {
           "FilterRules": [

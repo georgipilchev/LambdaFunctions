@@ -53,7 +53,6 @@ jobs:
             infra/notifications.json \
             > notifications-final.json
 
-
           aws s3api put-bucket-notification-configuration \
             --bucket moddatabucket \
             --notification-configuration file://notifications-final.json
@@ -72,7 +71,6 @@ jobs:
             --action lambda:InvokeFunction \
             --principal cognito-idp.amazonaws.com \
             --source-arn arn:aws:cognito-idp:eu-north-1:609356923180:userpool/eu-north-1_NmMwkSTUS || echo "Permission already exists"
-
 
       - name: Attach Cognito Post Confirmation Trigger
         run: |
