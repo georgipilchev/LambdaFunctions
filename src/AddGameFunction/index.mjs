@@ -1,33 +1,29 @@
 import { ListTablesCommand, DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import {
-  DynamoDBDocumentClient,
-  PutCommand,
-} from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 
 const client = new DynamoDBClient();
 const docClient = DynamoDBDocumentClient.from(client);
 
 export const handler = async (event, context) => {
+  const groups = event.requestContext?.authorizer?.claims?.["cognito:groups"];
 
-  // const groups =
-  //   event.requestContext?.authorizer?.claims?.["cognito:groups"];
-
-  // if (!groups || !groups.includes("Administrators")) {
-  //   return {
-  //     statusCode: 403,
-  //     body: JSON.stringify({
-  //       message: "Forbidden: Admins only",
-  //     }),
-  //   };
-  // }
+  if (!groups || !groups.includes("Administrators")) {
+    return {
+      statusCode: 403,
+      body: JSON.stringify({
+        message: "Forbidden: Admins only",
+      }),
+    };
+  }
 
   return await handlePostRequest(event, context);
 };
 
-
 const handlePostRequest = async (event, context) => {
   const { Game, ImageLink } = JSON.parse(event.body);
-  const slug = Game.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const slug = Game.toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
   const command = new PutCommand({
     TableName: "GamesTable",
     Item: {
@@ -41,19 +37,18 @@ const handlePostRequest = async (event, context) => {
     await docClient.send(command);
 
     return {
-    statusCode: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*"
-    },
-    body: JSON.stringify({ message: "Game added successfully" }),
-  };
-  }
-  catch (err) {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({ message: "Game added successfully" }),
+    };
+  } catch (err) {
     console.error(err);
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({
         message: err.message,

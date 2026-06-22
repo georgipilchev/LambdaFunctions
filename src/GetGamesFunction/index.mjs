@@ -1,8 +1,5 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import {
-  DynamoDBDocumentClient,
-  ScanCommand,
-} from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
 
 const client = new DynamoDBClient();
 const docClient = DynamoDBDocumentClient.from(client);
@@ -14,9 +11,11 @@ const corsHeaders = {
 };
 
 export const handler = async (event, context) => {
-
   // Handle browser preflight request
-  if (event.requestContext?.http?.method === "OPTIONS" || event.httpMethod === "OPTIONS") {
+  if (
+    event.requestContext?.http?.method === "OPTIONS" ||
+    event.httpMethod === "OPTIONS"
+  ) {
     return {
       statusCode: 204,
       headers: corsHeaders,
@@ -40,8 +39,7 @@ const handleGetRequest = async () => {
       headers: corsHeaders,
       body: JSON.stringify(result.Items),
     };
-  }
-  catch (err) {
+  } catch (err) {
     console.error(err);
 
     return {

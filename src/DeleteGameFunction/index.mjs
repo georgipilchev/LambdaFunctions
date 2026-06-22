@@ -1,22 +1,17 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import {
-  DynamoDBDocumentClient,
-  DeleteCommand,
-} from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 
 const client = new DynamoDBClient();
 const docClient = DynamoDBDocumentClient.from(client);
 
 export const handler = async (event) => {
-
-  const groups =
-    event.requestContext?.authorizer?.claims?.["cognito:groups"];
+  const groups = event.requestContext?.authorizer?.claims?.["cognito:groups"];
 
   if (!groups || !groups.includes("Administrators")) {
     return {
       statusCode: 403,
       headers: {
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({
         message: "Forbidden: Admins only",
@@ -38,21 +33,21 @@ const handleDeleteRequest = async (event) => {
   try {
     await docClient.send(command);
     return {
-    statusCode: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*"
-    },
-    body: JSON.stringify({
-      message: "Game deleted successfully",
-    }),
-  };
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        message: "Game deleted successfully",
+      }),
+    };
   } catch (err) {
     console.error(err);
 
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({
         message: err.message,

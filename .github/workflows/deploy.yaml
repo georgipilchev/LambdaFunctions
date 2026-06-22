@@ -30,6 +30,8 @@ jobs:
             --region eu-north-1 \
             --s3-bucket sam-artifacts-modsharingplatform \
             --capabilities CAPABILITY_IAM \
+            --parameter-overrides \
+                VTApiKey=${{ secrets.VT_API_KEY }} \
             --no-confirm-changeset \
             --no-fail-on-empty-changeset
 

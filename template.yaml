@@ -1,6 +1,11 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 
+Parameters:
+  VTApiKey:
+    Type: String
+    NoEcho: true
+
 Resources:
 
   ApiGateway:
@@ -84,6 +89,8 @@ Resources:
             RestApiId: !Ref ApiGateway
             Path: /Game
             Method: post
+            Auth:
+              Authorizer: CognitoAuthorizer
   
   AddUserFunction:
     Type: AWS::Serverless::Function
@@ -98,3 +105,162 @@ Resources:
                 - dynamodb:PutItem
               Resource:
                 - arn:aws:dynamodb:eu-north-1:609356923180:table/UserTable
+
+  AddModFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs22.x
+      CodeUri: src/AddModFunction
+      Environment:
+        Variables:
+          BUCKET: moddatabucket
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+              Resource:
+                - arn:aws:dynamodb:eu-north-1:609356923180:table/MainModTable
+      Events:
+        AddMod:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /Game/upload
+            Method: post
+            Auth:
+              Authorizer: CognitoAuthorizer
+  
+  DownloadVersionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs22.x
+      CodeUri: src/DownloadVersionFunction
+      Environment:
+        Variables:
+          BUCKET: moddatabucket
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+              Resource:
+                - arn:aws:s3:::moddatabucket/*
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+              Resource:
+                - arn:aws:dynamodb:eu-north-1:609356923180:table/MainModTable
+      Events:
+        DownloadVersion:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /{Game}/{modId}/{version}/download
+            Method: get
+  
+  ImageProcessorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs22.x
+      Handler: index.handler
+      CodeUri: src/ImageProcessorFunction
+      Environment:
+        Variables:
+          BUCKET: moddatabucket
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+                - s3:PutObject
+              Resource:
+                - arn:aws:s3:::moddatabucket/*
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+                - dynamodb:UpdateItem
+                - dynamodb:PutItem
+              Resource:
+                - arn:aws:dynamodb:eu-north-1:609356923180:table/MainModTable
+                - arn:aws:dynamodb:eu-north-1:609356923180:table/ThumbnailTable
+  
+  VirusCheckFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs22.x
+      Handler: index.handler
+      CodeUri: src/VirusCheckFunction
+      Timeout: 60
+      Environment:
+        Variables:
+          VT_API_KEY: !Ref VTApiKey
+          BUCKET: moddatabucket
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+                - s3:HeadObject
+                - s3:DeleteObject
+              Resource:
+                - arn:aws:s3:::moddatabucket/*
+        - DynamoDBCrudPolicy:
+            TableName: MainModTable
+  
+  VirusCheckBucketNotification:
+    Type: AWS::S3::BucketNotification
+    Properties:
+      Bucket: moddatabucket
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: s3:ObjectCreated:*
+            Function:
+              Fn::GetAtt:
+                - VirusCheckFunction
+                - Arn
+
+  AllowS3InvokeVirusScanner:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:
+        Ref: VirusCheckFunction
+      Action:
+        lambda:InvokeFunction
+      Principal:
+        s3.amazonaws.com
+      SourceArn:
+        arn:aws:s3:::moddatabucket
+
+  ImageProcessorBucketNotification:
+    Type: AWS::S3::BucketNotification
+    Properties:
+      Bucket: moddatabucket
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: prefix
+                    Value: mods/
+                  - Name: suffix
+                    Value: /original
+            Function:
+              Fn::GetAtt:
+                - ImageProcessorFunction
+                - Arn
+
+  AllowS3InvokeImageProcessor:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:
+        Ref: ImageProcessorFunction
+      Action:
+        lambda:InvokeFunction
+      Principal:
+        s3.amazonaws.com
+      SourceArn:
+        arn:aws:s3:::moddatabucket
