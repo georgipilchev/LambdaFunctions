@@ -17,15 +17,49 @@ Resources:
         AllowHeaders: "'Content-Type,Authorization'"
         AllowOrigin: "'*'"
       Auth:
-        DefaultAuthorizer: NONE
         Authorizers:
-          NONE:  # Add NONE as an authorizer
-            Identity:
-              Header: Authorization
           CognitoAuthorizer:
             UserPoolArn: arn:aws:cognito-idp:eu-north-1:609356923180:userpool/eu-north-1_NmMwkSTUS
             Identity:
               Header: Authorization
+
+  # CORS Preflight handler
+  CorsHandler:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs22.x
+      InlineCode: |
+        export const handler = async (event) => {
+          return {
+            statusCode: 200,
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Headers": "Content-Type,Authorization",
+              "Access-Control-Allow-Methods": "GET,POST,DELETE,OPTIONS"
+            },
+            body: JSON.stringify({})
+          };
+        }
+      Events:
+        UploadOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /Game/upload
+            Method: options
+        GameOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /Game
+            Method: options
+        DownloadOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /{Game}/{modId}/{version}/download
+            Method: options
 
   GetGamesFunction:
     Type: AWS::Serverless::Function
@@ -138,14 +172,6 @@ Resources:
             Method: post
             Auth:
               Authorizer: CognitoAuthorizer
-        AddModOptions:
-          Type: Api
-          Properties:
-            RestApiId: !Ref ApiGateway
-            Path: /Game/upload
-            Method: options
-            Auth:
-              Authorizer: NONE  # Explicitly set to NONE for OPTIONS
           
   DownloadVersionFunction:
     Type: AWS::Serverless::Function
