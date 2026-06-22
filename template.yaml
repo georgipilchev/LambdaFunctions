@@ -137,7 +137,11 @@ Resources:
             Method: post
             Auth:
               Authorizer: CognitoAuthorizer
-  
+            Cors:
+              AllowOrigin: "'*'"
+              AllowHeaders: "'Content-Type,Authorization'"
+              AllowMethods: "'POST,OPTIONS'"
+          
   DownloadVersionFunction:
     Type: AWS::Serverless::Function
     Properties:
