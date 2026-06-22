@@ -122,6 +122,12 @@ Resources:
                 - dynamodb:PutItem
               Resource:
                 - arn:aws:dynamodb:eu-north-1:609356923180:table/MainModTable
+
+            - Effect: Allow
+              Action:
+                - s3:PutObject
+              Resource:
+                - arn:aws:s3:::moddatabucket/*
       Events:
         AddMod:
           Type: Api
