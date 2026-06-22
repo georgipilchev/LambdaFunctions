@@ -23,44 +23,6 @@ Resources:
             Identity:
               Header: Authorization
 
-  # CORS Preflight handler
-  CorsHandler:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: index.handler
-      Runtime: nodejs22.x
-      InlineCode: |
-        export const handler = async (event) => {
-          return {
-            statusCode: 200,
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Headers": "Content-Type,Authorization",
-              "Access-Control-Allow-Methods": "GET,POST,DELETE,OPTIONS"
-            },
-            body: JSON.stringify({})
-          };
-        }
-      Events:
-        UploadOptions:
-          Type: Api
-          Properties:
-            RestApiId: !Ref ApiGateway
-            Path: /Game/upload
-            Method: options
-        GameOptions:
-          Type: Api
-          Properties:
-            RestApiId: !Ref ApiGateway
-            Path: /Game
-            Method: options
-        DownloadOptions:
-          Type: Api
-          Properties:
-            RestApiId: !Ref ApiGateway
-            Path: /{Game}/{modId}/{version}/download
-            Method: options
-
   GetGamesFunction:
     Type: AWS::Serverless::Function
     Properties:
