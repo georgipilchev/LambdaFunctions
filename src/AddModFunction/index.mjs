@@ -6,7 +6,6 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { randomUUID } from "crypto";
 
 const client = new DynamoDBClient();
 const docClient = DynamoDBDocumentClient.from(client);
@@ -34,7 +33,7 @@ const handlePostRequest = async (event) => {
   try {
     const body = JSON.parse(event.body);
 
-    const modId = randomUUID();
+    const modId = crypto.randomUUID();
     const modSK = `MOD#${modId}`;
 
     // Create DynamoDB entry
