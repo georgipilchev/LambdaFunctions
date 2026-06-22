@@ -7,6 +7,7 @@ Parameters:
     NoEcho: true
 
 Resources:
+
   ApiGateway:
     Type: AWS::Serverless::Api
     Properties:
@@ -16,8 +17,11 @@ Resources:
         AllowHeaders: "'Content-Type,Authorization'"
         AllowOrigin: "'*'"
       Auth:
-        DefaultAuthorizer: NONE # Moved outside Authorizers block
+        DefaultAuthorizer: NONE
         Authorizers:
+          NONE:  # Add NONE as an authorizer
+            Identity:
+              Header: Authorization
           CognitoAuthorizer:
             UserPoolArn: arn:aws:cognito-idp:eu-north-1:609356923180:userpool/eu-north-1_NmMwkSTUS
             Identity:
@@ -89,7 +93,7 @@ Resources:
             Method: post
             Auth:
               Authorizer: CognitoAuthorizer
-
+  
   AddUserFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -134,14 +138,15 @@ Resources:
             Method: post
             Auth:
               Authorizer: CognitoAuthorizer
-        AddModOptions: # Fixed indentation - now at same level as AddMod
+        AddModOptions:
           Type: Api
           Properties:
             RestApiId: !Ref ApiGateway
             Path: /Game/upload
             Method: options
-            # No Auth property needed since DefaultAuthorizer is NONE
-
+            Auth:
+              Authorizer: NONE  # Explicitly set to NONE for OPTIONS
+          
   DownloadVersionFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -170,7 +175,7 @@ Resources:
             RestApiId: !Ref ApiGateway
             Path: /{Game}/{modId}/{version}/download
             Method: get
-
+  
   ImageProcessorFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -196,7 +201,7 @@ Resources:
               Resource:
                 - arn:aws:dynamodb:eu-north-1:609356923180:table/MainModTable
                 - arn:aws:dynamodb:eu-north-1:609356923180:table/ThumbnailTable
-
+  
   VirusCheckFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -219,21 +224,27 @@ Resources:
                 - arn:aws:s3:::moddatabucket/*
         - DynamoDBCrudPolicy:
             TableName: MainModTable
-
+  
   AllowS3InvokeVirusScanner:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName:
         Ref: VirusCheckFunction
-      Action: lambda:InvokeFunction
-      Principal: s3.amazonaws.com
-      SourceArn: arn:aws:s3:::moddatabucket
+      Action:
+        lambda:InvokeFunction
+      Principal:
+        s3.amazonaws.com
+      SourceArn:
+        arn:aws:s3:::moddatabucket
 
   AllowS3InvokeImageProcessor:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName:
         Ref: ImageProcessorFunction
-      Action: lambda:InvokeFunction
-      Principal: s3.amazonaws.com
-      SourceArn: arn:aws:s3:::moddatabucket
+      Action:
+        lambda:InvokeFunction
+      Principal:
+        s3.amazonaws.com
+      SourceArn:
+        arn:aws:s3:::moddatabucket
