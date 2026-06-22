@@ -19,7 +19,7 @@ Resources:
       Auth:
         Authorizers:
           CognitoAuthorizer:
-            UserPoolArn: arn:aws:cognito-idp:eu-north-1:609356923180:userpool/eu-north-1_NmMwkSTUS
+            UserPoolArn: arn:aws:cognito-idp:eu-north-1:609356923180:userpool/eu-north-1_LvyjwoWyM
             Identity:
               Header: Authorization
 
