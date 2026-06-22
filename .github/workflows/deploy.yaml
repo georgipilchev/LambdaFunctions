@@ -37,14 +37,12 @@ jobs:
 
       - name: Configure S3 notifications
         run: |
-          VIRUS_ARN=$(aws lambda get-function \
-            --function-name modsharingplatform-api-VirusCheckFunction \
-            --query 'Configuration.FunctionArn' \
+          VIRUS_ARN=$(aws lambda list-functions \
+            --query "Functions[?contains(FunctionName, 'modsharingplatform-api-VirusCheckFunction')].FunctionArn" \
             --output text)
 
-          IMAGE_ARN=$(aws lambda get-function \
-            --function-name modsharingplatform-api-ImageProcessorFunction \
-            --query 'Configuration.FunctionArn' \
+          IMAGE_ARN=$(aws lambda list-functions \
+            --query "Functions[?contains(FunctionName, 'modsharingplatform-api-ImageProcessorFunction')].FunctionArn" \
             --output text)
 
           jq \
