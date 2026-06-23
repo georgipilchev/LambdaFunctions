@@ -125,7 +125,7 @@ export async function handler(event) {
         TableName: "ThumbnailTable",
         Item: {
           Game: game,
-          ThumbnailSK: `${modResponse.Item.SubmissionDate}#${modSK}`,
+          "SubmissionDate+ModID": `${modResponse.Item.SubmissionDate}#${modSK}`,
           ModID: modId,
           Name: modResponse.Item.Name,
           ThumbnailUrl: thumbUrl,
