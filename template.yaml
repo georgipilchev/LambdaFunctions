@@ -172,6 +172,8 @@ Resources:
       Runtime: nodejs22.x
       Handler: index.handler
       CodeUri: src/ImageProcessorFunction
+      Timeout: 300
+      MemorySize: 1024
       Environment:
         Variables:
           BUCKET: moddatabucket
