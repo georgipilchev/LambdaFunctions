@@ -143,8 +143,8 @@ async function scanFile(bucket, key) {
 
 async function pollAnalysisResults(
   analysisId,
-  maxAttempts = 20,
-  delayMs = 3000,
+  maxAttempts = 50,
+  delayMs = 5000,
 ) {
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     try {

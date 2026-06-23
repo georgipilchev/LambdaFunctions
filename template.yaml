@@ -110,6 +110,8 @@ Resources:
       Handler: index.handler
       Runtime: nodejs22.x
       CodeUri: src/AddModFunction
+      Timeout: 600
+      MemorySize: 2048
       Environment:
         Variables:
           BUCKET: moddatabucket
@@ -196,7 +198,8 @@ Resources:
       Runtime: nodejs22.x
       Handler: index.handler
       CodeUri: src/VirusCheckFunction
-      Timeout: 60
+      Timeout: 300
+      MemorySize: 1024
       Environment:
         Variables:
           VT_API_KEY: !Ref VTApiKey
