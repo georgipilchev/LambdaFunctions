@@ -204,7 +204,7 @@ function parseVersionKey(key) {
 }
 
 async function updateVersionStatus(Game, modId, version, status) {
-  const versionSK = `MOD#${modId}#VERSION#${version}`;
+  const versionSK = `VMOD#${modId}#VERSION#${version}`;
 
   await docClient.send(
     new UpdateCommand({

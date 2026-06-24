@@ -113,9 +113,10 @@ export async function handler(event) {
       new UpdateCommand({
         TableName: "MainModTable",
         Key: { Game: game, ModID: modSK },
-        UpdateExpression: "SET MainImageUrl = :mainUrl",
+        UpdateExpression: "SET MainImageUrl = :mainUrl, Status = :status",
         ExpressionAttributeValues: {
           ":mainUrl": mainImageUrl,
+          ":status": "Finished",
         },
       }),
     );

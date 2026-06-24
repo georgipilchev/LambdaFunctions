@@ -62,7 +62,7 @@ const handlePostRequest = async (event) => {
 
     if (version) {
       const uploadKey = `mods/${body.Game}/${modId}/versions/${version}.zip`;
-      const versionSK = `MOD#${modId}#VERSION#${version}`;
+      const versionSK = `VMOD#${modId}#VERSION#${version}`;
       await docClient.send(
         new PutCommand({
           TableName: "MainModTable",
@@ -71,7 +71,6 @@ const handlePostRequest = async (event) => {
             ModID: versionSK,
             Version: version,
             game: body.Game,
-            Description: body.Description || "",
             MainImageUrl: "", // Will be updated after image upload
             Status: "PendingUpload",
             UploadKey: uploadKey,

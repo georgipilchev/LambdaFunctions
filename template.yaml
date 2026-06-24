@@ -43,6 +43,69 @@ Resources:
             RestApiId: !Ref ApiGateway
             Path: /Game
             Method: get
+  
+  GetModsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs22.x
+      CodeUri: src/GetModsFunction
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+              Resource:
+                - arn:aws:dynamodb:eu-north-1:609356923180:table/MainModTable
+      Events:
+        GetMods:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /{Game}
+            Method: get
+
+  GetModFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs22.x
+      CodeUri: src/GetModFunction
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+              Resource:
+                - arn:aws:dynamodb:eu-north-1:609356923180:table/MainModTable
+      Events:
+        GetMod:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /{Game}/{modId}
+            Method: get
+
+  GetVersionsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs22.x
+      CodeUri: src/GetVersionsFunction
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+              Resource:
+                - arn:aws:dynamodb:eu-north-1:609356923180:table/MainModTable
+      Events:
+        GetVersions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /{Game}/{modId}/versions
+            Method: get
 
   DeleteGameFunction:
     Type: AWS::Serverless::Function
