@@ -43,7 +43,11 @@ export async function handler(event) {
     const modId = keyParts[2];
     const modSK = `MOD#${modId}`;
 
-    if (keyParts[3] !== "images" || keyParts[4] !== "main" || keyParts[5] !== "original") {
+    if (
+      keyParts[3] !== "images" ||
+      keyParts[4] !== "main" ||
+      keyParts[5] !== "original"
+    ) {
       console.warn("Skipping non-primary image key", key);
       continue;
     }
@@ -106,12 +110,14 @@ export async function handler(event) {
       }),
     );
 
-
     await docClient.send(
       new UpdateCommand({
         TableName: "MainModTable",
         Key: { Game: game, ModID: modSK },
-        UpdateExpression: "SET MainImageKey = :mainKey, Status = :status",
+        UpdateExpression: "SET MainImageKey = :mainKey, #s = :status",
+        ExpressionAttributeNames: {
+          "#s": "Status",
+        },
         ExpressionAttributeValues: {
           ":mainKey": mainKey,
           ":status": "Finished",
