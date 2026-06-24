@@ -99,8 +99,16 @@ Resources:
       Handler: index.handler
       Runtime: nodejs22.x
       CodeUri: src/GetModFunction
+      Environment:
+        Variables:
+          BUCKET: moddatabucket
       Policies:
         - Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+              Resource:
+                - arn:aws:s3:::moddatabucket/*
             - Effect: Allow
               Action:
                 - dynamodb:GetItem
