@@ -106,8 +106,6 @@ export async function handler(event) {
       }),
     );
 
-    const mainImageUrl = `https://${bucket}.s3.amazonaws.com/${mainKey}`;
-    const thumbUrl = `https://${bucket}.s3.amazonaws.com/${thumbKey}`;
 
     await docClient.send(
       new UpdateCommand({
@@ -115,7 +113,7 @@ export async function handler(event) {
         Key: { Game: game, ModID: modSK },
         UpdateExpression: "SET MainImageUrl = :mainUrl, Status = :status",
         ExpressionAttributeValues: {
-          ":mainUrl": mainImageUrl,
+          ":mainKey": mainKey,
           ":status": "Finished",
         },
       }),
@@ -129,7 +127,7 @@ export async function handler(event) {
           "SubmissionDate+ModID": `${modResponse.Item.SubmissionDate}#${modSK}`,
           ModID: modId,
           Name: modResponse.Item.Name,
-          ThumbnailUrl: thumbUrl,
+          ThumbnailKey: thumbKey,
           SubmissionDate: modResponse.Item.SubmissionDate,
         },
       }),

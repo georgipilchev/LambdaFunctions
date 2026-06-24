@@ -1,5 +1,6 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const client = new DynamoDBClient();
 const docClient = DynamoDBDocumentClient.from(client);
@@ -50,6 +51,19 @@ const handleGetRequest = async (game) => {
 
   try {
     const result = await docClient.send(command);
+
+    for (const item of result.Items) {
+      const key = item.ThumbnailKey;
+
+      item.ThumbnailUrl = await getSignedUrl(
+        s3,
+        new GetObjectCommand({
+          Bucket: process.env.BUCKET_NAME,
+          Key: key,
+        }),
+        { expiresIn: 3600 },
+      );
+    }
 
     return {
       statusCode: 200,
