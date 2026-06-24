@@ -54,11 +54,9 @@ export async function handler(event) {
     );
 
     return {
-      statusCode: 302,
-      headers: {
-        ...corsHeaders,
-        Location: url,
-      },
+      statusCode: 200,
+      headers: corsHeaders,
+      body: JSON.stringify({ url }),
     };
   } catch (err) {
     console.error("Download error", err);
