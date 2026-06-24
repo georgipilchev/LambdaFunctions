@@ -30,7 +30,7 @@ export async function handler(event) {
     const versionRecord = await docClient.send(
       new GetCommand({
         TableName: "MainModTable",
-        Key: { Game: Game, ModID: versionSK },
+        Key: { Game: Game, ModID: `VMOD#${modId}VERSION#${version}` },
       }),
     );
 
