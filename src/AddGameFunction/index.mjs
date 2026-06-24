@@ -27,7 +27,7 @@ const handlePostRequest = async (event, context) => {
   const command = new PutCommand({
     TableName: "GamesTable",
     Item: {
-      GameID: context.awsRequestId,
+      Slug: slug,
       Game,
       slug,
       ImageLink,

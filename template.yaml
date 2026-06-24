@@ -23,6 +23,27 @@ Resources:
             Identity:
               Header: Authorization
 
+  GetGameFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs22.x
+      CodeUri: src/GetGameFunction
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:ScanItem
+              Resource:
+                - arn:aws:dynamodb:eu-north-1:609356923180:table/GamesTable
+      Events:
+        GetGame:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /Game/{Slug}
+            Method: get
+
   GetGamesFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -62,7 +83,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref ApiGateway
-            Path: /{Game}
+            Path: /{Game}/mods
             Method: get
 
   GetModFunction:
