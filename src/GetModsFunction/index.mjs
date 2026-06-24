@@ -24,15 +24,14 @@ export const handler = async (event, context) => {
   }
 
   const game = event.pathParameters?.Game;
-  return await handleGetRequest(game, modId);
+  return await handleGetRequest(game);
 };
 
 const buildQueryInput = (game) => ({
-  TableName: "MainModTable",
-  KeyConditionExpression: "Game = :game AND begins_with(ModID, :modIdPrefix)",
+  TableName: "ThumbnailTable",
+  KeyConditionExpression: "Game = :game",
   ExpressionAttributeValues: {
     ":game": game,
-    ":modIdPrefix": "MOD#",
   },
 });
 

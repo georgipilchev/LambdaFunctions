@@ -56,7 +56,7 @@ Resources:
               Action:
                 - dynamodb:Query
               Resource:
-                - arn:aws:dynamodb:eu-north-1:609356923180:table/MainModTable
+                - arn:aws:dynamodb:eu-north-1:609356923180:table/ThumbnailTable
       Events:
         GetMods:
           Type: Api
