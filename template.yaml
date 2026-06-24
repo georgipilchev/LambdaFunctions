@@ -33,7 +33,7 @@ Resources:
         - Statement:
             - Effect: Allow
               Action:
-                - dynamodb:ScanItem
+                - dynamodb:GetItem
               Resource:
                 - arn:aws:dynamodb:eu-north-1:609356923180:table/GamesTable
       Events:
