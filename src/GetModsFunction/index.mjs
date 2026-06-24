@@ -59,7 +59,7 @@ const handleGetRequest = async (game) => {
       item.ThumbnailUrl = await getSignedUrl(
         s3,
         new GetObjectCommand({
-          Bucket: process.env.BUCKET_NAME,
+          Bucket: process.env.BUCKET,
           Key: key,
         }),
         { expiresIn: 3600 },

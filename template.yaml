@@ -71,6 +71,9 @@ Resources:
       Handler: index.handler
       Runtime: nodejs22.x
       CodeUri: src/GetModsFunction
+      Environment:
+        Variables:
+          BUCKET: moddatabucket
       Policies:
         - Statement:
             - Effect: Allow
