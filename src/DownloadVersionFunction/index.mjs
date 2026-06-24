@@ -56,6 +56,7 @@ export async function handler(event) {
     return {
       statusCode: 302,
       headers: {
+        ...corsHeaders,
         Location: url,
       },
     };
