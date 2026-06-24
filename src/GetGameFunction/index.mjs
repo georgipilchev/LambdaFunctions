@@ -39,7 +39,7 @@ export const handler = async (event, context) => {
 const buildGetInput = (gameslug) => ({
   TableName: "GamesTable",
   Key: {
-    GameSlug: gameslug,
+    Slug: gameslug,
   },
 });
 
