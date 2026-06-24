@@ -71,7 +71,7 @@ const handlePostRequest = async (event) => {
             ModID: versionSK,
             Version: version,
             game: body.Game,
-            MainImageUrl: "", // Will be updated after image upload
+            MainImageKey: "", // Will be updated after image upload
             Status: "PendingUpload",
             UploadKey: uploadKey,
             CreatedAt: new Date().toISOString(),
