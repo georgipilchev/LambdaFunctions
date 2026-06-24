@@ -6,17 +6,26 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 const s3 = new S3Client({});
 const dynamoClient = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(dynamoClient);
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*", // or your frontend URL
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Methods": "GET,OPTIONS",
+};
 
 export async function handler(event) {
-  const { Game, modId, version } = event.pathParameters;
-  const versionSK = `MOD#${modId}#VERSION#${version}`;
-  if (!Game ||!modId || !version) {
+  console.log(JSON.stringify(event, null, 2));
+
+  const { Game, modId, version } = event.pathParameters ?? {};
+
+  if (!Game || !modId || !version) {
     return {
       statusCode: 400,
-      body: JSON.stringify({ message: "Game, modId and version are required" }),
+      headers: corsHeaders,
+      body: JSON.stringify({
+        message: "Game, modId and version are required",
+      }),
     };
   }
-
   try {
     const versionRecord = await docClient.send(
       new GetCommand({
@@ -28,6 +37,7 @@ export async function handler(event) {
     if (!versionRecord.Item?.UploadKey) {
       return {
         statusCode: 404,
+        headers: corsHeaders,
         body: JSON.stringify({ message: "Version not found" }),
       };
     }
@@ -53,6 +63,7 @@ export async function handler(event) {
     console.error("Download error", err);
     return {
       statusCode: 500,
+      headers: corsHeaders,
       body: JSON.stringify({ message: "Failed to generate download URL" }),
     };
   }
