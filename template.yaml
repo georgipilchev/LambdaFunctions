@@ -14,7 +14,7 @@ Resources:
       Cors:
         AllowMethods: "'GET,POST,DELETE,OPTIONS'"
         AllowHeaders: "'Content-Type,Authorization'"
-        AllowOrigin: "'http://localhost:5173'" # or your frontend URL
+        AllowOrigin: "'https://localhost:5173'" # or your frontend URL
       Auth:
         Authorizers:
           CognitoAuthorizer:

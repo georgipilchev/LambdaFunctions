@@ -18,7 +18,7 @@ export const handler = async (event, context) => {
     return {
       statusCode: 403,
       headers: {
-        "Access-Control-Allow-Origin": "http://localhost:5173/",
+        "Access-Control-Allow-Origin": "https://localhost:5173/",
         "Cache-Control": "no-store"
       },
       body: JSON.stringify({
@@ -127,7 +127,7 @@ const handlePostRequest = async (event) => {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": "http://localhost:5173/",
+        "Access-Control-Allow-Origin": "https://localhost:5173/",
         "Content-Type": "application/json",
         "Cache-Control": "no-store",
       },
@@ -152,7 +152,7 @@ const handlePostRequest = async (event) => {
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Origin": "http://localhost:5173/",
+        "Access-Control-Allow-Origin": "https://localhost:5173/",
         "Cache-Control": "no-store"
       },
       body: JSON.stringify({

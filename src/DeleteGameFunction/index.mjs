@@ -11,7 +11,7 @@ export const handler = async (event) => {
     return {
       statusCode: 403,
       headers: {
-        "Access-Control-Allow-Origin": "http://localhost:5173",
+        "Access-Control-Allow-Origin": "https://localhost:5173",
         "Cache-Control": "no-store"
       },
       body: JSON.stringify({
@@ -36,7 +36,7 @@ const handleDeleteRequest = async (event) => {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": "http://localhost:5173",
+        "Access-Control-Allow-Origin": "https://localhost:5173",
         "Cache-Control": "no-store"
       },
       body: JSON.stringify({
@@ -49,7 +49,7 @@ const handleDeleteRequest = async (event) => {
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Origin": "http://localhost:5173",
+        "Access-Control-Allow-Origin": "https://localhost:5173",
         "Cache-Control": "no-store"
       },
       body: JSON.stringify({

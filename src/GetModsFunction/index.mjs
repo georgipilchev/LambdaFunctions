@@ -7,7 +7,7 @@ const client = new DynamoDBClient();
 const docClient = DynamoDBDocumentClient.from(client);
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "http://localhost:5173", // or your frontend URL
+  "Access-Control-Allow-Origin": "https://localhost:5173", // or your frontend URL
   "Access-Control-Allow-Headers": "Content-Type",
   "Access-Control-Allow-Methods": "GET,OPTIONS",
 };

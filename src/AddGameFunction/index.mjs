@@ -11,7 +11,7 @@ export const handler = async (event, context) => {
     return {
       statusCode: 403,
       headers: {
-        "Access-Control-Allow-Origin": "http://localhost:5173/",
+        "Access-Control-Allow-Origin": "https://localhost:5173/",
         "Cache-Control": "no-store"
       },
       body: JSON.stringify({
@@ -43,7 +43,7 @@ const handlePostRequest = async (event, context) => {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": "http://localhost:5173/",
+        "Access-Control-Allow-Origin": "https://localhost:5173/",
         "Cache-Control": "no-store"
       },
       body: JSON.stringify({ message: "Game added successfully" }),
@@ -53,7 +53,7 @@ const handlePostRequest = async (event, context) => {
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Origin": "http://localhost:5173/",
+        "Access-Control-Allow-Origin": "https://localhost:5173/",
         "Cache-Control": "no-store"
       },
       body: JSON.stringify({
