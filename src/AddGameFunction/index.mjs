@@ -10,6 +10,10 @@ export const handler = async (event, context) => {
   if (!groups || !groups.includes("Administrators")) {
     return {
       statusCode: 403,
+      headers: {
+        "Access-Control-Allow-Origin": "http://localhost:5173/",
+        "Cache-Control": "no-store"
+      },
       body: JSON.stringify({
         message: "Forbidden: Admins only",
       }),
@@ -39,7 +43,8 @@ const handlePostRequest = async (event, context) => {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "http://localhost:5173/",
+        "Cache-Control": "no-store"
       },
       body: JSON.stringify({ message: "Game added successfully" }),
     };
@@ -48,7 +53,8 @@ const handlePostRequest = async (event, context) => {
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "http://localhost:5173/",
+        "Cache-Control": "no-store"
       },
       body: JSON.stringify({
         message: err.message,

@@ -7,7 +7,7 @@ const s3 = new S3Client({});
 const dynamoClient = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(dynamoClient);
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*", // or your frontend URL
+  "Access-Control-Allow-Origin": "http://localhost:5173",
   "Access-Control-Allow-Headers": "Content-Type",
   "Access-Control-Allow-Methods": "GET,OPTIONS",
 };

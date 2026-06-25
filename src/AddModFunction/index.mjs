@@ -18,7 +18,8 @@ export const handler = async (event, context) => {
     return {
       statusCode: 403,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "http://localhost:5173/",
+        "Cache-Control": "no-store"
       },
       body: JSON.stringify({
         message: "Forbidden: Registered users only",
@@ -126,8 +127,9 @@ const handlePostRequest = async (event) => {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "http://localhost:5173/",
         "Content-Type": "application/json",
+        "Cache-Control": "no-store",
       },
       body: JSON.stringify({
         message: "Mod submission successful",
@@ -150,7 +152,8 @@ const handlePostRequest = async (event) => {
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "http://localhost:5173/",
+        "Cache-Control": "no-store"
       },
       body: JSON.stringify({
         message: err.message,

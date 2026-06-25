@@ -11,7 +11,8 @@ export const handler = async (event) => {
     return {
       statusCode: 403,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "http://localhost:5173",
+        "Cache-Control": "no-store"
       },
       body: JSON.stringify({
         message: "Forbidden: Admins only",
@@ -35,7 +36,8 @@ const handleDeleteRequest = async (event) => {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "http://localhost:5173",
+        "Cache-Control": "no-store"
       },
       body: JSON.stringify({
         message: "Game deleted successfully",
@@ -47,7 +49,8 @@ const handleDeleteRequest = async (event) => {
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "http://localhost:5173",
+        "Cache-Control": "no-store"
       },
       body: JSON.stringify({
         message: err.message,
